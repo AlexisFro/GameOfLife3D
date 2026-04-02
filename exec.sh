@@ -25,8 +25,10 @@ if [ $? -eq 0 ]; then
     cd ..
     echo "🚀 Lancement de $EXEC..."
     echo "----------------------------------------"
-    # Lance le programme
-    ./build/$EXEC
+    
+    # --- LA MAGIE EST ICI ---
+    # Le $@ transfère tes arguments (1 ou 2) au programme C++
+    ./build/$EXEC $@
 else
     echo "❌ Erreur de compilation. Le programme n'a pas été lancé."
 fi

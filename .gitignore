@@ -1,0 +1,49 @@
+# =========================
+# Dossiers de compilation
+# =========================
+build/
+bin/
+out/
+
+# =========================
+# Fichiers compilés (C/C++)
+# =========================
+*.o
+*.obj
+*.out
+*.exe
+*.dll
+*.so
+*.a
+*.dylib
+
+# =========================
+# Fichiers générés par le projet
+# =========================
+# On ignore le dossier où tu sauvegardes tes milliers d'images bmp !
+render/
+*.bmp
+*.mp4
+
+# =========================
+# Fichiers d'environnement OS
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Fichiers d'éditeurs (VS Code, etc.)
+# =========================
+.vscode/
+.idea/
+*.suo
+*.user
+*.swp
+
+# =========================
+# Fichiers de cache CMake
+# =========================
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
