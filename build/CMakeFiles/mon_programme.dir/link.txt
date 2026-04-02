@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/mon_programme.dir/link.d CMakeFiles/mon_programme.dir/main.cpp.o CMakeFiles/mon_programme.dir/src/app.cpp.o CMakeFiles/mon_programme.dir/libs/glad.c.o -o mon_programme  -lglfw -lGL -ldl

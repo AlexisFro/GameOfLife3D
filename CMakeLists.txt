@@ -7,6 +7,7 @@ project(AutomateCellulaire)
 # On utilise le standard C++17
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_BUILD_TYPE Debug)
 
 # On indique au compilateur où chercher les fichiers d'en-tête (équivalent du -I.)
 include_directories(${CMAKE_SOURCE_DIR})

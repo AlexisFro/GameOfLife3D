@@ -1,0 +1,20 @@
+[
+{
+  "directory": "/home/alexis/Documents/Cours/M1/Calculabilité/Automate_Cellulaire/build",
+  "command": "/usr/bin/g++-13 -I/home/alexis/Documents/Cours/M1/Calculabilité/Automate_Cellulaire -g -std=gnu++17 -o CMakeFiles/mon_programme.dir/main.cpp.o -c /home/alexis/Documents/Cours/M1/Calculabilité/Automate_Cellulaire/main.cpp",
+  "file": "/home/alexis/Documents/Cours/M1/Calculabilité/Automate_Cellulaire/main.cpp",
+  "output": "/home/alexis/Documents/Cours/M1/Calculabilité/Automate_Cellulaire/build/CMakeFiles/mon_programme.dir/main.cpp.o"
+},
+{
+  "directory": "/home/alexis/Documents/Cours/M1/Calculabilité/Automate_Cellulaire/build",
+  "command": "/usr/bin/g++-13 -I/home/alexis/Documents/Cours/M1/Calculabilité/Automate_Cellulaire -g -std=gnu++17 -o CMakeFiles/mon_programme.dir/src/app.cpp.o -c /home/alexis/Documents/Cours/M1/Calculabilité/Automate_Cellulaire/src/app.cpp",
+  "file": "/home/alexis/Documents/Cours/M1/Calculabilité/Automate_Cellulaire/src/app.cpp",
+  "output": "/home/alexis/Documents/Cours/M1/Calculabilité/Automate_Cellulaire/build/CMakeFiles/mon_programme.dir/src/app.cpp.o"
+},
+{
+  "directory": "/home/alexis/Documents/Cours/M1/Calculabilité/Automate_Cellulaire/build",
+  "command": "/usr/bin/gcc-13 -I/home/alexis/Documents/Cours/M1/Calculabilité/Automate_Cellulaire -g -o CMakeFiles/mon_programme.dir/libs/glad.c.o -c /home/alexis/Documents/Cours/M1/Calculabilité/Automate_Cellulaire/libs/glad.c",
+  "file": "/home/alexis/Documents/Cours/M1/Calculabilité/Automate_Cellulaire/libs/glad.c",
+  "output": "/home/alexis/Documents/Cours/M1/Calculabilité/Automate_Cellulaire/build/CMakeFiles/mon_programme.dir/libs/glad.c.o"
+}
+]

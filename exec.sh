@@ -22,10 +22,11 @@ make -j$(nproc)
 # 5. Vérifie si la compilation a réussi
 if [ $? -eq 0 ]; then
     echo "✅ Compilation réussie !"
+    cd ..
     echo "🚀 Lancement de $EXEC..."
     echo "----------------------------------------"
     # Lance le programme
-    ./$EXEC
+    ./build/$EXEC
 else
     echo "❌ Erreur de compilation. Le programme n'a pas été lancé."
 fi
