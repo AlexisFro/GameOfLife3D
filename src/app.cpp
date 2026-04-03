@@ -1,19 +1,18 @@
 #include "app.hpp"
 #include "app.hpp"
-#include "cube.hpp" // Inclure ta classe Cube
+#include "cube.hpp"
 #include <iostream>
 #include <ctime>
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "../libs/stb_image_write.h" // N'oublie pas de télécharger ce fichier et de le mettre dans ton dossier !
+#include "../libs/stb_image_write.h"
 
 #ifdef _WIN32
-    #include <direct.h>   // Requis pour _mkdir sous Windows
+    #include <direct.h> 
 #else
     #include <sys/stat.h> // Requis pour mkdir sous Mac/Linux
 #endif
 
-// Inclusions de GLM pour la caméra et les rotations
 #include "../libs/glm/glm.hpp"
 #include "../libs/glm/gtc/matrix_transform.hpp"
 #include "../libs/glm/gtc/type_ptr.hpp"
@@ -21,20 +20,15 @@
 void App::initGL(int mode) {
     std::cout << "--- DEMARRAGE DE L'APPLICATION ---" << std::endl;
     
-    // 1. Définir le mode (Temps réel ou Rendu vidéo)
     m_render_mode = (mode == 2);
 
-    // 2. Lancer les étapes d'initialisation une par une
     initWindow();
     infos_GPU();
     compileShaders();
     initbuffers();
-    
-    // 3. Démarrer la boucle principale
+
     run();
 }
-
-// ... ta fonction framebuffer_size_callback reste identique ...
 
 void App::framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -57,7 +51,7 @@ bool App::save_render(){
 
     if (render_params.frameCounter >= render_params.MAX_FRAMES) {
         std::cout << "\nTermine ! Vous pouvez compiler la video." << std::endl;
-        return true; // Casse la boucle while
+        return true;
     }
     return false;
 }
@@ -80,9 +74,9 @@ void App::infos_GPU(){
     glGetIntegerv(GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, &max_invocations);
     
     int max_size[3];
-    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 0, &max_size[0]); // X
-    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 1, &max_size[1]); // Y
-    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 2, &max_size[2]); // Z
+    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 0, &max_size[0]); 
+    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 1, &max_size[1]);
+    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 2, &max_size[2]); 
 
     std::cout << "\n--- LIMITES COMPUTE SHADER ---" << std::endl;
     std::cout << "Max Invocations par groupe (X*Y*Z) : " << max_invocations << std::endl;
@@ -158,7 +152,6 @@ GLuint App::compileSingleShader(GLenum type, const char* source, const std::stri
     glShaderSource(shader, 1, &source, NULL);
     glCompileShader(shader);
 
-    // Vérification des erreurs NVIDIA / AMD
     int success;
     char infoLog[512];
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
@@ -180,25 +173,19 @@ std::string App::loadShaderSource(const std::string& filepath) {
     return buffer.str();
 }
 
-// ------------------------------------------------------------------
-// FONCTION PRINCIPALE : Assemble tous les programmes GPU
-// ------------------------------------------------------------------
 void App::compileShaders() {
     std::cout << "--- COMPILATION DES SHADERS ---" << std::endl;
 
-    // 1. On lit le texte depuis tes vrais fichiers .glsl (que tu auras créés dans un dossier "shaders")
     std::string compCode = loadShaderSource("shaders/compute_shader.comp");
     std::string vertCode = loadShaderSource("shaders/vertex_shader.vert");
     std::string fragCode = loadShaderSource("shaders/fragment_shader.frag");
 
-    // 2. On compile le Compute Program
     GLuint computeShader = compileSingleShader(GL_COMPUTE_SHADER, compCode.c_str(), "COMPUTE SHADER");
     computeProgram = glCreateProgram();
     glAttachShader(computeProgram, computeShader);
     glLinkProgram(computeProgram);
     glDeleteShader(computeShader);
 
-    // 3. On compile le Render Program
     GLuint vertexShader = compileSingleShader(GL_VERTEX_SHADER, vertCode.c_str(), "VERTEX SHADER");
     GLuint fragmentShader = compileSingleShader(GL_FRAGMENT_SHADER, fragCode.c_str(), "FRAGMENT SHADER");
     
@@ -219,13 +206,12 @@ void App::initbuffers(){
     int totalCells = sim_params.sizeGrid * sim_params.sizeGrid * sim_params.sizeGrid;
     std::vector<int> initialGrid(totalCells, 0);
 
-    // Initialisation aléatoire : 20% de densité
     srand(time(NULL));
     for (int i = 0; i < totalCells; i++) {
-        if ((rand() % 100) < 7) initialGrid[i] = 1;
+        if ((rand() % 100) < sim_params.density) initialGrid[i] = 1;
     }
 
-    useGridA = true; // Assure-toi que c'est un attribut bool dans app.hpp !
+    useGridA = true;
 
     glGenBuffers(1, &ssboGridA);
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssboGridA);
@@ -235,10 +221,9 @@ void App::initbuffers(){
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssboGridB);
     glBufferData(GL_SHADER_STORAGE_BUFFER, totalCells * sizeof(int), NULL, GL_DYNAMIC_COPY);
     
-    // Au lieu de créer les cubes en variables locales, on les stocke dans la classe
-    // Si tu as déclaré "Cube* cube_blanc;" dans app.hpp :
-    cube_blanc = new Cube(true, 1.0f);
-    cube_noir = new Cube(false, 1.0f);
+
+    cube_blanc = new Cube(true, sim_params.cube_size);
+    cube_noir = new Cube(false, sim_params.cube_size);
 }
 
 void App::run() {
@@ -280,7 +265,6 @@ void App::run() {
             lastStepTime = currentTime;
         }
 
-        // --- RENDU ---
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glUseProgram(shaderProgram);
 
