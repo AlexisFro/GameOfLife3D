@@ -49,7 +49,7 @@ There are still many exciting features and optimizations to explore for this pro
 
 ---
 
-## Sources & Further Reading
+## Sources and Further Reading
 
 **https://fr.wikipedia.org/wiki/Jeu_de_la_vie**
 <br>
