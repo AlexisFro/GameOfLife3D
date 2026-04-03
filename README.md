@@ -4,6 +4,23 @@ During a course about computability, we've been learning about 2D cellular autom
 
 I first started by coding my 2D automaton in the terminal, and then got the idea to turn it into a 3D Game of Life. My professor told me that it would be interesting to see, but he had no idea how to properly model it to get a clear view of the game inside.
 
+## Compiling & Running
+
+This project currently compiles on Linux. Some modifications might be required to make it work on your specific operating system. 
+
+To build and launch the project, simply run the bash script:
+```bash
+./exec.sh
+```
+
+## Parameters
+
+There are two configuration files that you can easily modify to tweak the simulation and the visual output:
+
+sim_params.hpp : Contains the logic and rules for the cellular automaton.
+
+render_params.hpp : Contains the graphical settings (grid size, spacing, etc.).
+
 ## The Optimization
 
 My first representation was really time-consuming to compute, and we couldn't really see the depth difference because everything was in black and white. 
