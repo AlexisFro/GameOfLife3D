@@ -1,34 +1,40 @@
 #!/bin/bash
 
-# Nom de ton exécutable (doit être le même que dans CMakeLists.txt)
-EXEC="mon_programme"
+EXEC="GameOfLife3D"
 
-echo "🔨 Début de la compilation..."
+if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+    echo "Usage: ./exec.sh [MODE]"
+    echo ""
+    echo "Modes:"
+    echo "  1             Run in real-time mode (Default)."
+    echo "  2             Run in offline rendering mode (Exports frames to 'render/')."
+    echo "  -h, --help    Show this help message and exit."
+    echo ""
+    echo "Examples:"
+    echo "  ./exec.sh       # Compiles and runs in default real-time mode"
+    echo "  ./exec.sh 2     # Compiles and runs the offline renderer"
+    exit 0
+fi
 
-# 1. Crée le dossier build s'il n'existe pas (-p évite les erreurs s'il est déjà là)
+echo "🔨 Starting build process..."
+
 mkdir -p build
 
-# 2. Va dans le dossier build
 cd build
 
-# 3. Prépare les fichiers avec CMake
 cmake ..
 
-# 4. Compile le code
-# L'astuce "-j$(nproc)" permet d'utiliser tous les cœurs de ton processeur 
-# pour compiler beaucoup plus vite !
 make -j$(nproc)
 
-# 5. Vérifie si la compilation a réussi
 if [ $? -eq 0 ]; then
-    echo "✅ Compilation réussie !"
+    echo "✅ Build successful!"
+
     cd ..
-    echo "🚀 Lancement de $EXEC..."
-    echo "----------------------------------------"
     
-    # --- LA MAGIE EST ICI ---
-    # Le $@ transfère tes arguments (1 ou 2) au programme C++
+    echo "🚀 Starting $EXEC..."
+    echo "----------------------------------------"
+
     ./build/$EXEC $@
 else
-    echo "❌ Erreur de compilation. Le programme n'a pas été lancé."
+    echo "❌ Build failed. The program was not launched."
 fi

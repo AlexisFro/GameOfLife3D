@@ -13,7 +13,7 @@ set(CMAKE_BUILD_TYPE Debug)
 include_directories(${CMAKE_SOURCE_DIR})
 
 # On crée l'exécutable en listant tous les fichiers sources
-add_executable(mon_programme 
+add_executable(GameOfLife3D
     main.cpp 
     src/app.cpp 
     libs/glad.c
@@ -21,4 +21,4 @@ add_executable(mon_programme
 )
 
 # On lie les bibliothèques externes (équivalent de -lglfw -lGL -ldl)
-target_link_libraries(mon_programme glfw GL dl)
+target_link_libraries(GameOfLife3D glfw GL dl)

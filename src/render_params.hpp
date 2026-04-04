@@ -1,4 +1,6 @@
 #pragma once
+
+
 struct RenderParams{
     //PARAMETERS
     const int FPS = 60;

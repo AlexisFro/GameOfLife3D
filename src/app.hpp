@@ -10,7 +10,7 @@
 
 class App{
 
-    const char * m_app_name = "Automate Cellulaire 3D";
+    const char * m_app_name = "GameOfLife3D";
 
     SimParams sim_params;
     RenderParams render_params;
