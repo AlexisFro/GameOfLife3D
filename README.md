@@ -152,7 +152,7 @@ for more information about ffmpeg : https://ffmpeg.org/ffmpeg.html
 <p align="center">
   <img src="https://github.com/user-attachments/assets/8dfce2ea-c51c-4349-ae3a-d3b95fa2d655" alt="Moire Phenomena" width="80%">
   <br>
-  <em>Observing some Moiré Phenomena</em>
+  <em>Observing some funny phenomena</em>
 </p>
 
 ---
