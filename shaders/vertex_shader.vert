@@ -6,7 +6,6 @@
     uniform mat4 VP;
     uniform int uGridSize;
     uniform float uSpacing;
-    uniform bool jitter;
 
 
     float random(vec3 co) {
