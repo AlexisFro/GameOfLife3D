@@ -20,8 +20,8 @@ class App{
     bool useGridA;
 
     //window
-    Cube* cube_blanc;
-    Cube* cube_noir;
+    Cube* white_cube;
+    Cube* black_cube;
 
     GLFWwindow * window;
     int height = 1080;

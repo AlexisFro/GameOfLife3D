@@ -10,7 +10,7 @@
 #ifdef _WIN32
     #include <direct.h> 
 #else
-    #include <sys/stat.h> // Requis pour mkdir sous Mac/Linux
+    #include <sys/stat.h>
 #endif
 
 #include "../libs/glm/glm.hpp"
@@ -18,7 +18,7 @@
 #include "../libs/glm/gtc/type_ptr.hpp"
 
 void App::initGL(int mode) {
-    std::cout << "--- DEMARRAGE DE L'APPLICATION ---" << std::endl;
+    std::cout << "--- Starting Simulation ---" << std::endl;
     
     m_render_mode = (mode == 2);
 
@@ -61,13 +61,13 @@ void App::infos_GPU(){
     const GLubyte* version = glGetString(GL_VERSION);
 
     if (!renderer || !vendor || !version) {
-        std::cout << "ERREUR : Impossible de recuperer les infos GPU." << std::endl;
+        std::cout << "ERROR, IMPOSSIBLE TO GET THE GPU INFORMATIONS." << std::endl;
         return;
     }
 
-    std::cout << "\n=== INFO MATERIEL ===" << std::endl;
+    std::cout << "\n=== INFOS ===" << std::endl;
     std::cout << "GPU     : " << renderer << std::endl;
-    std::cout << "Marque  : " << vendor << std::endl;
+    std::cout << "BRAND  : " << vendor << std::endl;
     std::cout << "OpenGL  : " << version << std::endl;
     
     int max_invocations;
@@ -78,11 +78,11 @@ void App::infos_GPU(){
     glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 1, &max_size[1]);
     glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 2, &max_size[2]); 
 
-    std::cout << "\n--- LIMITES COMPUTE SHADER ---" << std::endl;
+    std::cout << "\n--- LIMITS FOR COMPUTER SHADERS ---" << std::endl;
     std::cout << "Max Invocations par groupe (X*Y*Z) : " << max_invocations << std::endl;
-    std::cout << "Max Taille X : " << max_size[0] << std::endl;
-    std::cout << "Max Taille Y : " << max_size[1] << std::endl;
-    std::cout << "Max Taille Z : " << max_size[2] << std::endl;
+    std::cout << "Max size X : " << max_size[0] << std::endl;
+    std::cout << "Max size Y : " << max_size[1] << std::endl;
+    std::cout << "Max size Z : " << max_size[2] << std::endl;
     std::cout << "=====================\n" << std::endl;
 }
 void App::tearGL(){
@@ -90,10 +90,9 @@ void App::tearGL(){
 }
 App::~App(){
 
-    delete cube_blanc;
-    delete cube_noir;
+    delete white_cube;
+    delete black_cube;
 
-    // 2. On libère la mémoire de la carte graphique (VRAM)
     glDeleteBuffers(1, &ssboGridA);
     glDeleteBuffers(1, &ssboGridB);
     glDeleteProgram(computeProgram);
@@ -222,8 +221,8 @@ void App::initbuffers(){
     glBufferData(GL_SHADER_STORAGE_BUFFER, totalCells * sizeof(int), NULL, GL_DYNAMIC_COPY);
     
 
-    cube_blanc = new Cube(true, sim_params.cube_size);
-    cube_noir = new Cube(false, sim_params.cube_size);
+    white_cube = new Cube(true, sim_params.cube_size);
+    black_cube = new Cube(false, sim_params.cube_size);
 }
 
 void App::run() {
@@ -272,20 +271,27 @@ void App::run() {
             glfwGetFramebufferSize(window, &width, &height);
         }
         
-        glm::mat4 projection = glm::perspective(glm::radians(60.0f), (float)width/height, 0.1f, 2000.0f);
-        glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -sim_params.sizeGrid * sim_params.espacement * 0.5f));
-        glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), currentTime * 0.2f, glm::vec3(0, 1, 0));
+        glm::mat4 projection = glm::perspective(glm::radians(60.0f), (float)width/height, sim_params.near_plane, sim_params.far_plane);
+        
+        glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -sim_params.sizeGrid * sim_params.spacing * sim_params.camera_distance_multiplier));
+        glm::mat4 rotation = glm::mat4(1.0f); 
+        rotation = glm::rotate(rotation, currentTime * sim_params.rotation_speed_y, glm::vec3(0.0f, 1.0f, 0.0f));
+        rotation = glm::rotate(rotation, currentTime * sim_params.rotation_speed_x, glm::vec3(1.0f, 0.0f, 0.0f));
         rotation = glm::rotate(rotation, currentTime * 0.05f, glm::vec3(1, 0, 0));
         glm::mat4 vp = projection * view * rotation; 
 
         glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "VP"), 1, GL_FALSE, glm::value_ptr(vp));
         glUniform1i(glGetUniformLocation(shaderProgram, "uGridSize"), sim_params.sizeGrid);
-        glUniform1f(glGetUniformLocation(shaderProgram, "uSpacing"), sim_params.espacement);
+        glUniform1f(glGetUniformLocation(shaderProgram, "uSpacing"), sim_params.spacing);
         glUniform1f(glGetUniformLocation(shaderProgram, "uTime"), currentTime);
+
+        glUniform3fv(glGetUniformLocation(shaderProgram, "uColorBottom"), 1, glm::value_ptr(sim_params.color_bottom));
+        glUniform3fv(glGetUniformLocation(shaderProgram, "uColorMiddle"), 1, glm::value_ptr(sim_params.color_middle));
+        glUniform3fv(glGetUniformLocation(shaderProgram, "uColorTop"), 1, glm::value_ptr(sim_params.color_top));
 
         glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, useGridA ? ssboGridA : ssboGridB);
 
-        glBindVertexArray(cube_blanc->getVAO()); 
+        glBindVertexArray(white_cube->getVAO()); 
         glDrawArraysInstanced(GL_TRIANGLES, 0, 36, totalCells); 
         glBindVertexArray(0);
         
