@@ -1,6 +1,6 @@
 # 3D Game of Life
 
-During a course about computability, we've been learning about 2D cellular automata. While my professor, Mr. Perrot, was talking about Turing machines and related problems, I asked myself if a 3D Game of Life existed.
+During a course about computability, we've been learning about 2D cellular automata. While my professor, [Mr. Perrot](https://pageperso.lis-lab.fr/kevin.perrot/), was talking about Turing machines and related problems, I asked myself if a 3D Game of Life existed.
 
 I first started by coding my 2D automaton in the terminal, and then got the idea to turn it into a 3D Game of Life. My professor told me that it would be interesting to see, but he had no idea how to properly model it to get a clear view of the game inside.
 
